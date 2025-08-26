@@ -76,23 +76,94 @@ int Eliminar_Duplicados(Dato* datos, int n) {
     return n; 
 }
 
+//funcion 3
+void Agregar_Alumno ( Dato *& datos , Dato Alumno_nuevo ) {
+cout<<"Ingrese los datos del estudiante:"<<endl;
 
 
 
-int main() {    
-    Dato* datos = Leer_Archivo("datos.dat"); 
-    if (!datos) return 0;                    
-
-    
-    for (int i = 0; i < 5; i++) {
-        cout << "ID: " << datos[i].Id
-            << "  Nombre: " << datos[i].Nombre
-            << "  Fecha: " << datos[i].Fecha_Nacimiento
-            << "  Curso: " << datos[i].Curso
-            << "  VTR: " << datos[i].VTR << endl;
-    }
-
-    delete[] datos;
-    return 0;
+//id
+unsigned int id;
+cout<<"ID ( NUmero mayor a 1500)"<<endl;
+cin >> id;
+if (id<=1500){
+    cout<<"Id no valido"<<endl;
+    return;
 }
+cin.ignore(1000, '\n');
+
+
+
+//nombre
+char nombre[50];
+cout<<"Primer nombre y primer apellido :;"<<endl;
+cin.getline(nombre,50);
+
+
+//fecha
+char fecha[11];
+cout<<"Fecha de nacimiento ( formato YYYY/MM/DD ) :"<<endl;
+cin.getline(fecha,11);
+
+//3 notas
+int n1,n2,n3;
+cout<<"Notas de las 3 evaluaciones ( separadas por espacio ):"<<endl;
+cin >> n1 >> n2 >> n3;
+cin.ignore(1000, '\n');
+
+//Curso
+char curso[7];
+cout<<"Sigla del curso ( ejemplo : INF134 ) :"<<endl;
+cin.getline(curso,7);
+
+//Veces tomado ramo
+unsigned int vtr;
+cout<<"VTR (1 -3) :"<<endl;
+cin >> vtr;
+
+//2fa
+for (unsigned int i = 0; i < n_alumni; ++i) {
+    if (datos[i].Id == id && strcmp(curso, datos[i].Curso) == 0) {
+        cout << "Alumno ya ingresado en ese curso.";
+        return;
+    }
+}
+
+Alumno_nuevo.Id = id;
+strncpy(Alumno_nuevo.Nombre, nombre, 49); Alumno_nuevo.Nombre[49] = '\0';
+strncpy(Alumno_nuevo.Fecha_Nacimiento, fecha, 10); Alumno_nuevo.Fecha_Nacimiento[10] = '\0';
+Alumno_nuevo.Notas[0] = n1; Alumno_nuevo.Notas[1] = n2; Alumno_nuevo.Notas[2] = n3;
+strncpy(Alumno_nuevo.Curso, curso, 6); Alumno_nuevo.Curso[6] = '\0';
+Alumno_nuevo.VTR = vtr;
+
+Dato* crec = new Dato[n_alumni + 1];
+for (unsigned int i = 0; i < n_alumni; ++i) crec[i] = datos[i];
+crec[n_alumni] = Alumno_nuevo;
+
+delete[] datos;
+datos = crec;
+n_alumni++;
+
+cout << "Alumno agregado.";
+
+};
+
+//funcion 4
+int Calcular_Promedio_Estudiante ( Dato * datos , unsigned int id_alumno , char
+* asignatura_a_buscar ) {
+
+    for (unsigned int i = 0; i < n_alumni; ++i) {
+        if (datos[i].Id == id_alumno && strcmp(datos[i].Curso, asignatura_a_buscar) == 0) {
+            int suma = datos[i].Notas[0] + datos[i].Notas[1] + datos[i].Notas[2];
+            return suma / 3; 
+        }
+    }
+    return -1; 
+}
+
+
+
+
+int main() {}    
+
 
